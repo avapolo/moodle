@@ -1,0 +1,63 @@
+version: '2.1'
+
+services:
+
+  db_ies:
+    container_name: db_ies
+    image: avapolos/postgres-bdr:latest
+    environment:
+     - POSTGRES_PASSWORD=L5Pojz33jND5
+     - APP_USER=moodle
+     - APP_PASSWORD=gA7cyJtPZdVH
+     - APP_DB=moodle
+    networks:
+      db:
+    restart: unless-stopped
+
+  db_polo:
+    container_name: db_polo
+    image: avapolos/postgres-bdr:latest
+    environment:
+     - POSTGRES_PASSWORD=L5Pojz33jND5
+     - APP_USER=moodle
+     - APP_PASSWORD=gA7cyJtPZdVH
+     - APP_DB=moodle
+    networks:
+      db:
+    restart: unless-stopped
+
+  replication-bootstrapper:
+    container_name: replication-bootstrapper
+    image: avapolos/replication-bootstrapper:latest
+    environment:
+     - POSTGRES_PASSWORD=L5Pojz33jND5
+     - APP_USER=moodle
+     - APP_PASSWORD=gA7cyJtPZdVH
+     - APP_DB=moodle
+     - REPLICATION_PEER1=db_ies
+     - REPLICATION_PEER2=db_polo
+     - REPLICATION_PASSWORD=J44eW8g6JAmk
+    networks:
+      db:
+
+  moodle:
+    container_name: moodle
+    image: avapolos/moodle
+    build: .
+    ports:
+      - 8080:80
+    environment:
+      - DEBUG=true
+      - DB_HOST=db_polo
+      - DB_NAME=moodle
+      - DB_USER=moodle
+      - DB_PASS=gA7cyJtPZdVH
+      - DB_REPLICATION_PEER1=db_ies
+      - DB_REPLICATION_PEER2=db_polo
+      - WWW_ROOT=http://moodle.avapolos:8080
+    networks:
+      db:
+
+networks:
+  db:
+

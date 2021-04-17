@@ -2,7 +2,8 @@
 //-------------------- AJUSTES MOODLE IES PAR --------------------------
 ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
 $i = 0; //DEGUB
-$dsn = "pgsql:host=db_moodle_ies;dbname=moodle;user=moodle;password=$DB_MOODLE_MOODLE_PASSWORD";
+$dsn = "pgsql:host=" . getenv("DB_REPLICATION_PEER1") . ";dbname=" . getenv("DB_NAME") . ";user=" . getenv("DB_USER") . ";password=" . getenv("DB_PASS");
+echo "DSN: " . $dsn;
 try{
 	$conn = new PDO($dsn);
   $updateValue = array();
@@ -61,5 +62,4 @@ try{
 	// mesnagem de error
 echo $e->getMessage();
 }
-
 ?>

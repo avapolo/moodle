@@ -1,11 +1,4 @@
-                                 .-..-.
-   _____                         | || |
-  /____/-.---_  .---.  .---.  .-.| || | .---.
-  | |  _   _  |/  _  \/  _  \/  _  || |/  __ \
-  * | | | | | || |_| || |_| || |_| || || |___/
-    |_| |_| |_|\_____/\_____/\_____||_|\_____)
-
-Moodle - the world's open source learning platform
+# Moodle - the world's open source learning platform
 
 Moodle <https://moodle.org> is a learning platform designed to provide
 educators, administrators and learners with a single robust, secure and
@@ -27,12 +20,12 @@ the data.
 
 See <https://docs.moodle.org> for details of Moodle's many features.
 
+# Environment variables
 
-environment variables:
-
-DB_HOST
-DB_NAME
-DB_USER
-DB_PASS
-DB_HOST
-DEBUG
+DB_HOST=db_ies
+DB_NAME=moodle
+DB_USER=moodle
+DB_PASS=gA7cyJtPZdVH
+DEBUG=true
+DB_REPLICATION_PEER1=db_ies
+DB_REPLICATION_PEER2=db_polo
