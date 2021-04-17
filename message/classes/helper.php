@@ -53,8 +53,30 @@ class helper {
      * @param int $timeto the time up until the message being sent
      * @return array of messages
      */
+
     public static function get_messages($userid, $otheruserid, $timedeleted = 0, $limitfrom = 0, $limitnum = 0,
                                         $sort = 'timecreated ASC', $timefrom = 0, $timeto = 0) {
+
+        // MODIFICAÇÕES AVAPOLOS
+        $sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 WHERE M1.conversationid IN (SELECT conversationid FROM 					mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2;";
+        $params = ['userid1' => $userid, 'userid2' => $otheruserid];
+        $convIds = $DB->get_records_sql($sql, $params);
+
+        if(count($convIds)>1){
+         	$sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 left outer join mdl_message_conversations mc on mc.id=m1.conversationid WHERE 				M1.conversationid IN (SELECT conversationid FROM mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2 AND 						mc.id is null;";
+         	$wrongId = $DB->get_records_sql($sql, $params);
+
+       		$sql = "SELECT M1.conversationid FROM mdl_message_conversation_members M1 right outer join mdl_message_conversations mc on mc.id=m1.conversationid WHERE 					M1.conversationid IN (SELECT conversationid FROM mdl_message_conversation_members WHERE userid=:userid1) AND M1.userid=:userid2;";
+       		$rightId = $DB->get_records_sql($sql, $params);
+
+       		$sql = "UPDATE mdl_messages SET conversationid=".current($rightId)->conversationid." WHERE conversationid=".current($wrongId)->conversationid;
+       		$retorno = $DB->get_records_sql($sql, $params);
+
+       		$sql = "DELETE FROM mdl_message_conversation_members WHERE conversationid=".current($wrongId)->conversationid;
+       		$retorno = $DB->get_records_sql($sql, $params);
+      	}
+        // FIM MODIFICAÇÕES AVAPOLOS
+
         global $DB;
 
         $hash = self::get_conversation_hash([$userid, $otheruserid]);

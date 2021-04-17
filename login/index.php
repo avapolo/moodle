@@ -170,6 +170,47 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
     }
 
     if ($user) {
+    	if($user->id > 3){ //casos especiais de contas admin
+    		//fazer o código de verificação para acesso de professores e alunos
+		    //ALUNO NÃO PODE ACESSAR A IES
+			//PROFESSOR NÃO PODE ACESSAR O POLO
+			
+			// Verificar se a conta é professor de alguma turma
+			$roleidTeacher = $DB->get_field('role', 'id', ['shortname' => 'editingteacher']);
+			$isTeacherAnyWhere = $DB->record_exists('role_assignments', ['userid' => $user->id, 'roleid' => $roleidTeacher]);
+			
+			//verifica se é aluno
+			$roleidStudent = $DB->get_field('role', 'id', ['shortname' => 'student']);
+			$isStudent = $DB->record_exists('role_assignments', ['userid' => $user->id, 'roleid' => $roleidStudent]);
+			
+			//verifica se esse arquivo existe, se sim é um polo, caso contrario é uma ies
+			$tipoInstalacao = (file_exists("/app/scripts/polo")) ? 'POLO' : 'IES'; // IES ou POLO
+			$loginNaoAutorizado = false;
+			
+			if($isTeacherAnyWhere){ //é professor
+				if($tipoInstalacao == 'POLO'){ //impede o acesso e informa uma mensagem de erro				
+					//mensagem de erro
+					$loginNaoAutorizado = true;
+					$errormsg = 'Acesso inválido! Conta de professor não deve acessar o POLO';
+		       		$errorcode = 2;
+		       		$SESSION->loginerrormsg = $errormsg;
+					return redirect($CFG->wwwroot.'/login/index.php');
+				}
+				
+			}
+			
+			if($isStudent){ //é estudante
+				if($tipoInstalacao == 'IES'){ //impede o acesso e informa uma mensagem de erro				
+					//mensagem de erro
+					$loginNaoAutorizado = true;
+					$errormsg = 'Acesso inválido! Conta de aluno não deve acessar a IES';
+		    		$errorcode = 2;
+		    		$SESSION->loginerrormsg = $errormsg;
+					return redirect($CFG->wwwroot.'/login/index.php');
+				}
+			}
+    	}
+    	
 
         // language setup
         if (isguestuser($user)) {
@@ -269,10 +310,14 @@ if ($frm and isset($frm->username)) {                             // Login WITH 
 
         // Discard any errors before the last redirect.
         unset($SESSION->loginerrormsg);
-
-        // test the session actually works by redirecting to self
-        $SESSION->wantsurl = $urltogo;
-        redirect(new moodle_url(get_login_url(), array('testsession'=>$USER->id)));
+		
+		//caso não tenha dado erro, redireciona para o login no moodle corretamente
+		//if(!$loginNaoAutorizado){
+			// test the session actually works by redirecting to self
+		    $SESSION->wantsurl = $urltogo;
+		    redirect(new moodle_url(get_login_url(), array('testsession'=>$USER->id)));
+		//}
+        
 
     } else {
         if (empty($errormsg)) {

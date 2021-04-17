@@ -2179,7 +2179,9 @@ class file_storage {
     /**
      * Cron cleanup job.
      */
-    public function cron() {
+    //MODIFICAÇÕES AVAPOLOS
+    public function cron($now=false) {
+    //FIM MODIFICAÇÕES AVAPOLOS
         global $CFG, $DB;
         require_once($CFG->libdir.'/cronlib.php');
 
@@ -2187,7 +2189,12 @@ class file_storage {
         // those are identified by time stamp of the /. root dir
         mtrace('Deleting old draft files... ', '');
         cron_trace_time_and_memory();
-        $old = time() - 60*60*24*4;
+        //MODIFICAÇÕES AVAPOLOS
+        if($now)
+           $old = time();
+        else
+           $old = time() - 60*60*24*4;
+        //FIM MODIFICAÇÕES AVAPOLOS
         $sql = "SELECT *
                   FROM {files}
                  WHERE component = 'user' AND filearea = 'draft' AND filepath = '/' AND filename = '.'

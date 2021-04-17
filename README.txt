@@ -26,3 +26,13 @@ Moodle is written in PHP and JavaScript and uses an SQL database for storing
 the data.
 
 See <https://docs.moodle.org> for details of Moodle's many features.
+
+
+environment variables:
+
+DB_HOST
+DB_NAME
+DB_USER
+DB_PASS
+DB_HOST
+DEBUG

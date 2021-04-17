@@ -204,7 +204,10 @@ class user_edit_form extends moodleform {
 
         $usernew = (object)$usernew;
         $user    = $DB->get_record('user', array('id' => $usernew->id));
-
+        // MODIFICAÇÕES AVAPOLOS
+        if($usernew->email=="")
+          $usernew->email="email@doesnotexist.com";
+        // FIM MODIFICAÇÕES AVAPOLOS
         // Validate email.
         if (!isset($usernew->email)) {
             // Mail not confirmed yet.

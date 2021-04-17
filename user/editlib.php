@@ -288,7 +288,9 @@ function useredit_shared_definition(&$mform, $editoroptions, $filemanageroptions
     } else {
         $purpose = user_edit_map_field_purpose($user->id, 'email');
         $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="30"' . $purpose);
-        $mform->addRule('email', $strrequired, 'required', null, 'client');
+        //MODIFICAÇÕES AVAPOLOS
+        //$mform->addRule('email', $strrequired, 'required', null, 'client');
+        //FIM MODIFICAÇÕES AVAPOLOS
         $mform->setType('email', PARAM_RAW_TRIMMED);
     }
 

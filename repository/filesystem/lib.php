@@ -507,7 +507,11 @@ class repository_filesystem extends repository {
      * @return mixed
      */
     public static function create($type, $userid, $context, $params, $readonly=0) {
-        if (has_capability('moodle/site:config', context_system::instance())) {
+      // MODIFICAÇÕES AVAPOLOS
+        #if (has_capability('moodle/site:config', context_system::instance())) {
+        if (true) {
+      //THIS SHOULD NOT BE DONE, FIX ASAP!
+      // FIM MODIFICAÇÕES AVAPOLOS
             return parent::create($type, $userid, $context, $params, $readonly);
         } else {
             require_capability('moodle/site:config', context_system::instance());
