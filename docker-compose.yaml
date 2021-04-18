@@ -46,18 +46,24 @@ services:
     build: .
     ports:
       - 8080:80
+    volumes:
+      - moodledata:/app/moodledata
     environment:
       - DEBUG=true
-      - DB_HOST=db_polo
+      - DB_HOST=db_ies
       - DB_NAME=moodle
       - DB_USER=moodle
       - DB_PASS=gA7cyJtPZdVH
       - DB_REPLICATION_PEER1=db_ies
       - DB_REPLICATION_PEER2=db_polo
-      - WWW_ROOT=http://moodle.avapolos:8080
+      - WWW_ROOT=http://localhost:8080
     networks:
       db:
 
 networks:
   db:
 
+volumes:
+  moodledata:
+  db_ies:
+  db_polo:

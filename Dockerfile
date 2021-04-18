@@ -4,7 +4,7 @@ RUN apk add postgresql-bdr-client
 
 WORKDIR /app/public
 
-VOLUME /app/moodledata
+VOLUME [ /app/moodledata ]
 
 COPY . ./
 
